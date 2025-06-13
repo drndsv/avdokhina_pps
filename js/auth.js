@@ -1,39 +1,40 @@
-document
-  .getElementById("loginForm")
-  .addEventListener("submit", async function (e) {
-    e.preventDefault();
-
-    const username = document.getElementById("username").value;
-    const password = document.getElementById("password").value;
-
-    try {
-      const response = await fetch("http://localhost:8080/api/auth/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ username, password }),
-      });
-
-      if (!response.ok) {
-        const error = await response.text();
-        alert("Ошибка входа: " + error);
-        return;
-      }
-
-      const data = await response.json();
-      localStorage.setItem("token", data.token); // сохраняем токен
-
-      // Перенаправление в личный кабинет или на главную
-      window.location.href = "profile.html";
-    } catch (err) {
-      console.error(err);
-      alert("Ошибка подключения к серверу");
-    }
-  });
-
-// Регистрация
+// Вход
 document.addEventListener("DOMContentLoaded", () => {
+  const loginForm = document.getElementById("loginForm");
+  if (loginForm) {
+    loginForm.addEventListener("submit", async function (e) {
+      e.preventDefault();
+
+      const login = document.getElementById("username").value;
+      const password = document.getElementById("password").value;
+
+      try {
+        const response = await fetch("http://localhost:8080/api/auth/login", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ login, password }),
+        });
+
+        if (!response.ok) {
+          const error = await response.text();
+          alert("Ошибка входа: " + error);
+          return;
+        }
+
+        const user = await response.json();
+        localStorage.setItem("user", JSON.stringify(user)); // сохраняем пользователя
+
+        window.location.href = "profile.html";
+      } catch (err) {
+        console.error(err);
+        alert("Ошибка подключения к серверу");
+      }
+    });
+  }
+
+  // Регистрация
   const registerForm = document.getElementById("registerForm");
   if (registerForm) {
     registerForm.addEventListener("submit", async function (e) {
