@@ -9,9 +9,9 @@ document.addEventListener("DOMContentLoaded", () => {
     "greeting"
   ).textContent = `Здравствуйте, ${user.fullName}!`;
 
-  document.getElementById("accountBtn").addEventListener("click", () => {
-    window.location.href = "account.html";
-  });
+  // document.getElementById("accountBtn").addEventListener("click", () => {
+  //   window.location.href = "account.html";
+  // });
 
   document.getElementById("searchBtn").addEventListener("click", () => {
     window.location.href = "../search.html";
