@@ -10,13 +10,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
       try {
         const response = await fetch(
-          "http://localhost:8080/app_user/isUserExist/{login}/{password}",
+          `http://localhost:8080/app_user/isUserExist/${login}/${password}`,
           {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ login, password }),
+            method: "GET",
           }
         );
 
@@ -29,7 +25,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const user = await response.json();
         localStorage.setItem("user", JSON.stringify(user)); // сохраняем пользователя
 
-        window.location.href = "profile.html";
+        window.location.href = "profile/home.html";
       } catch (err) {
         console.error(err);
         alert("Ошибка подключения к серверу");
@@ -37,6 +33,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  // Регистрация
   // Регистрация
   const registerForm = document.getElementById("registerForm");
   if (registerForm) {
@@ -49,16 +46,19 @@ document.addEventListener("DOMContentLoaded", () => {
       const password = document.getElementById("password").value;
 
       try {
-        const response = await fetch(
-          "http://localhost:8080/api/auth/register",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ fullName, email, phone, password }),
-          }
-        );
+        const response = await fetch("http://localhost:8080/app_user/add", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            fullName: fullName,
+            email: email,
+            phone: phone,
+            password: password,
+            roleId: 3,
+          }),
+        });
 
         if (!response.ok) {
           const error = await response.text();
