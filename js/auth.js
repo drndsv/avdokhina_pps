@@ -1,4 +1,3 @@
-// Вход
 document.addEventListener("DOMContentLoaded", () => {
   const loginForm = document.getElementById("loginForm");
   if (loginForm) {
@@ -25,7 +24,20 @@ document.addEventListener("DOMContentLoaded", () => {
         const user = await response.json();
         localStorage.setItem("user", JSON.stringify(user)); // сохраняем пользователя
 
-        window.location.href = "profile/home.html";
+        // Перенаправление в зависимости от роли
+        switch (user.roleId) {
+          case 1:
+            window.location.href = "profile/home.html";
+            break;
+          case 2:
+            window.location.href = "admin.html";
+            break;
+          case 3:
+            window.location.href = "manager.html";
+            break;
+          default:
+            alert("Неизвестная роль. Обратитесь к администратору.");
+        }
       } catch (err) {
         console.error(err);
         alert("Ошибка подключения к серверу");
@@ -33,7 +45,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Регистрация
   // Регистрация
   const registerForm = document.getElementById("registerForm");
   if (registerForm) {
@@ -56,7 +67,7 @@ document.addEventListener("DOMContentLoaded", () => {
             email: email,
             phone: phone,
             password: password,
-            roleId: 3,
+            roleId: 3, // по умолчанию менеджер
           }),
         });
 

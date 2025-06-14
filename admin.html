@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Администратор</title>
+    <link rel="stylesheet" href="css/styles.css" />
+    <link rel="stylesheet" href="css/admin.css" />
+  </head>
+  <body>
+    <header class="header">
+      <div class="user-info">
+        <span id="adminName">Здравствуйте, Администратор</span>
+      </div>
+      <button onclick="logout()" class="btn logout-btn">Выйти</button>
+    </header>
+    <div class="admin-container">
+      <div class="tabs">
+        <button class="tab-btn" onclick="openTab('registration')">
+          Регистрация
+        </button>
+        <button class="tab-btn" onclick="openTab('users')">Пользователи</button>
+        <button class="tab-btn" onclick="openTab('rules')">Регламенты</button>
+      </div>
+
+      <!-- Вкладка регистрации -->
+      <div class="tab-content" id="registration">
+        <h2>Регистрация пользователя</h2>
+        <form id="adminRegisterForm">
+          <label>ФИО:<input type="text" id="fullName" required /></label>
+          <label>Телефон:<input type="tel" id="phone" required /></label>
+          <label>Почта:<input type="email" id="email" required /></label>
+          <label>Пароль:<input type="password" id="password" required /></label>
+          <label
+            >Роль:
+            <select id="role">
+              <option value="1">Клиент</option>
+              <option value="2">Администратор</option>
+              <option value="3">Менеджер</option>
+              <option value="4">Горничная</option>
+            </select>
+          </label>
+          <button type="submit" class="btn">Создать</button>
+        </form>
+      </div>
+
+      <!-- Вкладка пользователей -->
+      <div class="tab-content" id="users" style="display: none">
+        <h2>Список пользователей</h2>
+        <table id="usersTable">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>ФИО</th>
+              <th>Телефон</th>
+              <th>Почта</th>
+              <th>Пароль</th>
+              <th>Роль</th>
+              <th>Активность</th>
+              <th>Действия</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+
+      <!-- Вкладка регламентов -->
+      <div class="tab-content" id="rules" style="display: none">
+        <h2>Регламенты</h2>
+        <button class="btn" onclick="addRule()">Добавить регламент</button>
+        <table id="rulesTable">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Наименование</th>
+              <th>Ссылка на файл</th>
+              <th>Действия</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- динамически заполняется -->
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Модальное окно -->
+      <div id="ruleModal" class="modal" style="display: none">
+        <div class="modal-content">
+          <span class="close" onclick="closeRuleModal()">&times;</span>
+          <h3 id="ruleModalTitle">Добавить регламент</h3>
+          <form id="ruleForm">
+            <input type="hidden" id="ruleId" />
+            <label
+              >Наименование: <input type="text" id="ruleName" required
+            /></label>
+            <label
+              >Ссылка на файл: <input type="text" id="ruleFileUrl" required
+            /></label>
+            <button type="submit" class="btn">Сохранить</button>
+          </form>
+        </div>
+      </div>
+      <!-- Модальное окно редактирования пользователя -->
+      <div id="userModal" class="modal" style="display: none">
+        <div class="modal-content">
+          <span class="close" onclick="closeUserModal()">&times;</span>
+          <h3 id="userModalTitle">Редактировать пользователя</h3>
+          <form id="userForm">
+            <input type="hidden" id="editUserId" />
+            <label>ФИО: <input type="text" id="editFullName" required /></label>
+            <label>Телефон: <input type="tel" id="editPhone" required /></label>
+            <label>Почта: <input type="email" id="editEmail" required /></label>
+            <label
+              >Пароль: <input type="text" id="editPassword" required
+            /></label>
+            <label>
+              Роль:
+              <select id="editRole">
+                <option value="1">Клиент</option>
+                <option value="2">Администратор</option>
+                <option value="3">Менеджер</option>
+                <option value="4">Горничная</option>
+              </select>
+            </label>
+            <label>
+              Активен:
+              <select id="editIsActive">
+                <option value="true">Да</option>
+                <option value="false">Нет</option>
+              </select>
+            </label>
+            <button type="submit" class="btn">Сохранить</button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <script src="js/admin.js"></script>
+  </body>
+</html>
