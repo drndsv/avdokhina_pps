@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Панель менеджера</title>
+    <link rel="stylesheet" href="css/moderator.css" />
+  </head>
+  <body>
+    <h1>Панель менеджера</h1>
+    <button id="logoutBtn" onclick="logout()">🚪 Выйти</button>
+
+    <div id="roomsTab" class="tab-content">
+      <h2>Номера</h2>
+      <button onclick="openRoomModal()">➕ Добавить номер</button>
+      <table id="roomsTable">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Вместимость</th>
+            <th>Занято</th>
+            <th>Цена за сутки</th>
+            <th>Действия</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+
+    <!-- Модальное окно -->
+    <div id="roomModal" class="modal" style="display: none">
+      <div class="modal-content">
+        <span class="close" onclick="closeRoomModal()">×</span>
+        <h3 id="roomModalTitle">Добавить номер</h3>
+        <form id="roomForm">
+          <input type="hidden" id="roomId" />
+          <label
+            >Вместимость:
+            <input type="number" id="roomCapacity" required />
+          </label>
+          <label
+            >Занято:
+            <select id="roomOccupied">
+              <option value="false">Нет</option>
+              <option value="true">Да</option>
+            </select>
+          </label>
+          <label
+            >Цена за сутки:
+            <input type="number" id="roomPrice" required />
+          </label>
+          <button type="submit">Сохранить</button>
+        </form>
+      </div>
+    </div>
+
+    <script src="js/moderator.js"></script>
+  </body>
+</html>

@@ -33,7 +33,7 @@ document.addEventListener("DOMContentLoaded", () => {
             window.location.href = "admin.html";
             break;
           case 3:
-            window.location.href = "manager.html";
+            window.location.href = "moderator.html";
             break;
           default:
             alert("Неизвестная роль. Обратитесь к администратору.");
