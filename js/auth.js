@@ -9,13 +9,16 @@ document.addEventListener("DOMContentLoaded", () => {
       const password = document.getElementById("password").value;
 
       try {
-        const response = await fetch("http://localhost:8080/api/auth/login", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ login, password }),
-        });
+        const response = await fetch(
+          "http://localhost:8080/app_user/isUserExist/{login}/{password}",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ login, password }),
+          }
+        );
 
         if (!response.ok) {
           const error = await response.text();
