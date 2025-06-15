@@ -20,4 +20,14 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("bookingsBtn").addEventListener("click", () => {
     window.location.href = "bookings.html";
   });
+
+  // Обработчик кнопки выхода
+  document.getElementById("logoutBtn").addEventListener("click", () => {
+    logout();
+  });
 });
+
+function logout() {
+  localStorage.removeItem("user"); // Очистка данных пользователя
+  window.location.href = "../login.html"; // Редирект на страницу входа
+}
