@@ -9,6 +9,15 @@
     <h1>Панель менеджера</h1>
     <button id="logoutBtn" onclick="logout()">🚪 Выйти</button>
 
+    <!-- Навигация по вкладкам -->
+    <div class="tabs">
+      <button onclick="showTab('roomsTab')">🏨 Номера</button>
+      <button onclick="showTab('editRequestsTab')">
+        ✍️ Запросы на изменения
+      </button>
+    </div>
+
+    <!-- Вкладка "Номера" -->
     <div id="roomsTab" class="tab-content">
       <h2>Номера</h2>
       <button onclick="openRoomModal()">➕ Добавить номер</button>
@@ -19,6 +28,25 @@
             <th>Вместимость</th>
             <th>Занято</th>
             <th>Цена за сутки</th>
+            <th>Действия</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+
+    <!-- Вкладка "Запросы на изменения" -->
+    <div id="editRequestsTab" class="tab-content" style="display: none">
+      <h2>Запросы на изменения брони</h2>
+      <table id="requestsTable">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Клиент</th>
+            <th>Дата заезда</th>
+            <th>Дата выезда</th>
+            <th>Номер</th>
+            <th>Комментарий</th>
             <th>Действия</th>
           </tr>
         </thead>

@@ -149,14 +149,10 @@ async function loadUsers() {
 
 function getRoleName(roleId) {
   switch (roleId) {
-    case 1:
-      return "Клиент";
     case 2:
       return "Администратор";
     case 3:
       return "Менеджер";
-    case 4:
-      return "Горничная";
     default:
       return "Неизвестно";
   }
