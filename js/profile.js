@@ -9,16 +9,12 @@ document.addEventListener("DOMContentLoaded", () => {
     "greeting"
   ).textContent = `Здравствуйте, ${user.fullName}!`;
 
-  // document.getElementById("accountBtn").addEventListener("click", () => {
-  //   window.location.href = "account.html";
-  // });
-
   document.getElementById("searchBtn").addEventListener("click", () => {
     window.location.href = "../search.html";
   });
 
   document.getElementById("bookingsBtn").addEventListener("click", () => {
-    window.location.href = "bookings.html";
+    window.location.href = "../myBookings.html";
   });
 
   // Обработчик кнопки выхода

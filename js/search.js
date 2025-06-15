@@ -11,6 +11,14 @@ document.addEventListener("DOMContentLoaded", () => {
     const priceFrom = document.getElementById("priceFrom").value;
     const priceTo = document.getElementById("priceTo").value;
 
+    // Сохраняем даты в localStorage
+    localStorage.setItem("checkInDate", checkIn);
+    localStorage.setItem("checkOutDate", checkOut);
+
+    // Логируем значения
+    console.log("checkInDate:", checkIn);
+    console.log("checkOutDate:", checkOut);
+
     let url;
     let params = new URLSearchParams();
     params.append("checkInDate", checkIn);
