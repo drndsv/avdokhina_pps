@@ -5,6 +5,11 @@ document.addEventListener("DOMContentLoaded", async () => {
     return;
   }
 
+  // Кнопка "Назад"
+  document.getElementById("backBtn").addEventListener("click", () => {
+    window.location.href = "../profile/home.html";
+  });
+
   const tableBody = document.querySelector("#bookingsTable tbody");
 
   try {
@@ -28,13 +33,13 @@ document.addEventListener("DOMContentLoaded", async () => {
       const totalAmount = booking.totalAmount || 0; // Общая стоимость из базы данных
 
       const row = document.createElement("tr");
-      row.innerHTML = `
-            <td>${roomId}</td> <!-- ID комнаты -->
-            <td>${booking.checkInDate}</td>
-            <td>${booking.checkOutDate}</td>
-            <td>${totalAmount}₽</td> <!-- Стоимость -->
-            <td><button class="btn" onclick="viewBooking(${booking.id})">Открыть</button></td>
-          `;
+      row.innerHTML = ` 
+              <td>${roomId}</td> <!-- ID комнаты -->
+              <td>${booking.checkInDate}</td>
+              <td>${booking.checkOutDate}</td>
+              <td>${totalAmount}₽</td> <!-- Стоимость -->
+              <td><button class="btn" onclick="viewBooking(${booking.id})">Открыть</button></td>
+            `;
       tableBody.appendChild(row);
     });
   } catch (err) {

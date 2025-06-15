@@ -46,7 +46,6 @@
             <th>Дата заезда</th>
             <th>Дата выезда</th>
             <th>Номер</th>
-            <th>Комментарий</th>
             <th>Действия</th>
           </tr>
         </thead>
@@ -54,28 +53,44 @@
       </table>
     </div>
 
-    <!-- Модальное окно -->
+    <!-- Модальное окно для деталей запроса -->
+    <div id="requestModal" class="modal" style="display: none">
+      <div class="modal-content">
+        <span class="close" onclick="closeRequestModal()">×</span>
+        <h3>Детали запроса</h3>
+        <p><strong>ID запроса:</strong> <span id="modalRequestId"></span></p>
+        <p><strong>Клиент ID:</strong> <span id="modalClientId"></span></p>
+        <p><strong>Дата заезда:</strong> <span id="modalCheckInDate"></span></p>
+        <p>
+          <strong>Дата выезда:</strong> <span id="modalCheckOutDate"></span>
+        </p>
+        <p><strong>Номер:</strong> <span id="modalRoomId"></span></p>
+        <p><strong>Комментарий:</strong> <span id="modalComment"></span></p>
+
+        <!-- Кнопки для принятия и отклонения запроса -->
+        <div class="modal-buttons">
+          <button onclick="acceptRequest()">Принять запрос</button>
+          <button onclick="rejectRequest()">Отклонить запрос</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Модальное окно для добавления/редактирования номера -->
     <div id="roomModal" class="modal" style="display: none">
       <div class="modal-content">
         <span class="close" onclick="closeRoomModal()">×</span>
         <h3 id="roomModalTitle">Добавить номер</h3>
         <form id="roomForm">
           <input type="hidden" id="roomId" />
-          <label
-            >Вместимость:
-            <input type="number" id="roomCapacity" required />
-          </label>
-          <label
-            >Занято:
-            <select id="roomOccupied">
-              <option value="false">Нет</option>
-              <option value="true">Да</option>
-            </select>
-          </label>
-          <label
-            >Цена за сутки:
-            <input type="number" id="roomPrice" required />
-          </label>
+          <label for="roomCapacity">Вместимость:</label>
+          <input type="number" id="roomCapacity" required />
+          <label for="roomOccupied">Занято:</label>
+          <select id="roomOccupied" required>
+            <option value="true">Да</option>
+            <option value="false">Нет</option>
+          </select>
+          <label for="roomPrice">Цена за сутки:</label>
+          <input type="number" id="roomPrice" required />
           <button type="submit">Сохранить</button>
         </form>
       </div>

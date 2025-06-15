@@ -25,7 +25,7 @@ document.addEventListener("DOMContentLoaded", () => {
         phone: document.getElementById("phone").value,
         email: document.getElementById("email").value,
         password: document.getElementById("password").value,
-        roleId: parseInt(document.getElementById("role").value),
+        roleId: parseInt(document.getElementById("role").value, 10),
         isActive: true,
       };
 
@@ -37,7 +37,8 @@ document.addEventListener("DOMContentLoaded", () => {
         });
 
         if (!res.ok) {
-          alert("Ошибка при регистрации");
+          const errorText = await res.text();
+          alert(`Ошибка: ${errorText}`);
           return;
         }
 
@@ -45,6 +46,7 @@ document.addEventListener("DOMContentLoaded", () => {
         loadUsers();
       } catch (err) {
         console.error("Ошибка:", err);
+        alert("Ошибка при регистрации");
       }
     });
 
@@ -55,13 +57,14 @@ document.addEventListener("DOMContentLoaded", () => {
     const fileUrl = document.getElementById("ruleFileUrl").value;
 
     const rule = {
+      id: id ? parseInt(id, 10) : undefined,
       regulationName: name,
       fileLink: fileUrl,
     };
 
     try {
       const res = await fetch(
-        `http://localhost:8080/regulation/${id ? "update/" + id : "add"}`,
+        `http://localhost:8080/regulation/${id ? "update" : "add"}`,
         {
           method: id ? "PUT" : "POST",
           headers: { "Content-Type": "application/json" },
@@ -85,16 +88,21 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const id = document.getElementById("editUserId").value;
     const updatedUser = {
+      id: Number(document.getElementById("editUserId").value),
       fullName: document.getElementById("editFullName").value,
       phone: document.getElementById("editPhone").value,
       email: document.getElementById("editEmail").value,
       password: document.getElementById("editPassword").value,
-      roleId: parseInt(document.getElementById("editRole").value),
-      isActive: document.getElementById("editIsActive").value === "true",
+      roleId: parseInt(document.getElementById("editRole").value, 10),
+      isActive:
+        document.getElementById("editIsActive").value === "true" ||
+        document.getElementById("editIsActive").value === true,
     };
 
+    console.log(updatedUser); // Проверяем, что данные передаются верно
+
     try {
-      const res = await fetch(`http://localhost:8080/app_user/update/${id}`, {
+      const res = await fetch("http://localhost:8080/app_user/update", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(updatedUser),
@@ -123,23 +131,34 @@ async function loadUsers() {
 
   try {
     const res = await fetch("http://localhost:8080/app_user/getAll");
+    if (!res.ok) {
+      alert("Ошибка при загрузке пользователей");
+      console.error("Ошибка:", res.statusText);
+      return;
+    }
+
     const users = await res.json();
 
-    users.forEach((user) => {
+    // Фильтруем только администраторов и менеджеров
+    const workers = users.filter(
+      (user) => user.roleId === 2 || user.roleId === 3
+    );
+
+    workers.forEach((user) => {
       const row = document.createElement("tr");
       row.innerHTML = `
-          <td>${user.id}</td>
-          <td>${user.fullName}</td>
-          <td>${user.phone}</td>
-          <td>${user.email}</td>
-          <td>${user.password}</td>
-          <td>${getRoleName(user.roleId)}</td>
-          <td>${user.isActive ? "Активен" : "Заблокирован"}</td>
-          <td>
-            <button onclick="editUser(${user.id})">✏️</button>
-            <button onclick="deleteUser(${user.id})">🗑️</button>
-          </td>
-        `;
+        <td>${user.id}</td>
+        <td>${user.fullName}</td>
+        <td>${user.phone}</td>
+        <td>${user.email}</td>
+        <td>${user.password}</td>
+        <td>${getRoleName(user.roleId)}</td>
+        <td>${user.isActive ? "Активен" : "Заблокирован"}</td>
+        <td>
+          <button onclick="editUser(${user.id})">✏️</button>
+          <button onclick="deleteUser(${user.id})">🗑️</button>
+        </td>
+      `;
       tableBody.appendChild(row);
     });
   } catch (err) {
@@ -160,7 +179,11 @@ function getRoleName(roleId) {
 
 async function editUser(userId) {
   try {
-    const res = await fetch(`http://localhost:8080/app_user/get/${userId}`);
+    const res = await fetch(`http://localhost:8080/app_user/getById/${userId}`);
+    if (!res.ok) {
+      alert("Ошибка при загрузке пользователя");
+      return;
+    }
     const user = await res.json();
     openUserModal(user);
   } catch (err) {
@@ -172,9 +195,15 @@ async function editUser(userId) {
 async function deleteUser(userId) {
   if (!confirm("Удалить пользователя?")) return;
   try {
-    await fetch(`http://localhost:8080/app_user/delete/${userId}`, {
+    const res = await fetch(`http://localhost:8080/app_user/delete/${userId}`, {
       method: "DELETE",
     });
+
+    if (!res.ok) {
+      alert("Ошибка при удалении пользователя");
+      return;
+    }
+
     loadUsers();
   } catch (err) {
     alert("Ошибка удаления пользователя");
@@ -189,6 +218,12 @@ async function loadRules() {
 
   try {
     const res = await fetch("http://localhost:8080/regulation/getAll");
+    if (!res.ok) {
+      alert("Ошибка при загрузке регламентов");
+      console.error("Ошибка:", res.statusText);
+      return;
+    }
+
     const rules = await res.json();
 
     rules.forEach((rule) => {
@@ -196,7 +231,7 @@ async function loadRules() {
       row.innerHTML = `
           <td>${rule.id}</td>
           <td>${rule.regulationName}</td>
-          <td>${rule.fileLink}"></td>
+          <td>${rule.fileLink}</td>
           <td>
             <button onclick="editRule(${rule.id})">✏️</button>
             <button onclick="deleteRule(${rule.id})">🗑️</button>
@@ -215,36 +250,29 @@ function addRule() {
 
 async function editRule(id) {
   try {
-    const res = await fetch(`http://localhost:8080/regulation/get/${id}`);
+    const res = await fetch(`http://localhost:8080/regulation/getById/${id}`);
+    if (!res.ok) {
+      alert("Ошибка при получении данных регламента");
+      return;
+    }
+
     const rule = await res.json();
     openRuleModal(true, rule);
   } catch (err) {
     alert("Ошибка при получении данных регламента");
+    console.error(err);
   }
 }
-
-async function deleteRule(id) {
-  if (!confirm("Удалить регламент?")) return;
-  try {
-    await fetch(`http://localhost:8080/regulation/delete/${id}`, {
-      method: "DELETE",
-    });
-    loadRules();
-  } catch (err) {
-    alert("Ошибка при удалении регламента");
-  }
-}
-
-// === Модальные окна ===
 
 function openRuleModal(isEdit = false, rule = null) {
   document.getElementById("ruleModal").style.display = "block";
   document.getElementById("ruleModalTitle").textContent = isEdit
     ? "Редактировать регламент"
     : "Добавить регламент";
+
   document.getElementById("ruleId").value = rule?.id || "";
-  document.getElementById("ruleName").value = rule?.name || "";
-  document.getElementById("ruleFileUrl").value = rule?.fileUrl || "";
+  document.getElementById("ruleName").value = rule?.regulationName || "";
+  document.getElementById("ruleFileUrl").value = rule?.fileLink || "";
 }
 
 function closeRuleModal() {

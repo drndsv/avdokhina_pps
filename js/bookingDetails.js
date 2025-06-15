@@ -8,6 +8,11 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   const infoDiv = document.getElementById("bookingInfo");
 
+  // Кнопка "Назад"
+  document.getElementById("backBtn").addEventListener("click", () => {
+    window.location.href = "myBookings.html";
+  });
+
   try {
     const response = await fetch(`http://localhost:8080/booking/getAll`);
     const bookings = await response.json();
@@ -38,11 +43,11 @@ document.addEventListener("DOMContentLoaded", async () => {
     const roomNumber = booking.room?.number || `ID: ${booking.roomId}`;
 
     infoDiv.innerHTML = `
-        <p><strong>ID:</strong> ${booking.id}</p>
-        <p><strong>Дата заезда:</strong> ${booking.checkInDate}</p>
-        <p><strong>Дата выезда:</strong> ${booking.checkOutDate}</p>
-        <p><strong>Номер:</strong> ${roomNumber}</p>
-      `;
+          <p><strong>ID:</strong> ${booking.id}</p>
+          <p><strong>Дата заезда:</strong> ${booking.checkInDate}</p>
+          <p><strong>Дата выезда:</strong> ${booking.checkOutDate}</p>
+          <p><strong>Номер:</strong> ${roomNumber}</p>
+        `;
 
     document.getElementById("cancelBtn").addEventListener("click", async () => {
       const confirmed = confirm("Вы уверены, что хотите отменить бронь?");
